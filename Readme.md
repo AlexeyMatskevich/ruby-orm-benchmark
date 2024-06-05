@@ -1,14 +1,14 @@
-# How to?
+# How to benchmark?
 
-## Dip version
+## Dip version https://github.com/bibendi/dip
 ```bash
-cd [dir]
+cd [dir] #activerecord, sequel, etc
 dip provision
 ```
 
 ## Docker compose
 ```bash
-cd [dir]
+cd [dir] #activerecord, sequel, etc
 
 docker compose down --volumes
 docker compose up -d postgres
