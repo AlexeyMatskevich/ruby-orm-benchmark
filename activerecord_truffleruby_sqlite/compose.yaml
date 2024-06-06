@@ -3,7 +3,7 @@ x-app: &app
     context: .
     args:
       TRUFFLERUBY_VERSION: '24.0.1'
-  image: truffleruby-test:1.0.0
+  image: truffleruby-test-sqlite:1.0.0
   tmpfs:
     - /tmp
     - /app/tmp

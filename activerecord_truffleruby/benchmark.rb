@@ -33,7 +33,7 @@ ActiveRecord::Base.uncached do
 end
 
 Benchmark.bm(10) do |x|
-  10.times do |n|
+  30.times do |n|
     x.report("ActiveRecord truffleruby postgres #{n}:") do
       ActiveRecord::Base.uncached do
         50000.times do |i|
