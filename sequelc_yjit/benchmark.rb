@@ -39,16 +39,10 @@ end
 
 Benchmark.bm(10) do |x|
   30.times do |n|
-    x.report("SequelC-YJIT run #{n}:") do
-      Post.where(id: n + 1).first.title
-    end
-  end
-end
-
-Benchmark.bm(10) do |x|
-  x.report("SequelC-YJIT:") do
-    50000.times do |i|
-      Post.where(id: i + 1).first.title
+    x.report("Sequel sequel_pg YJIT #{n}:") do
+      50000.times do |i|
+        Post.where(id: i + 1).first.title
+      end
     end
   end
 end

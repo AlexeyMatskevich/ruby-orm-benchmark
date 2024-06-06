@@ -44,7 +44,7 @@ Benchmark.bm(10) do |x|
 end
 
 Benchmark.bm(10) do |x|
-  x.report("SequelC:") do
+  x.report("Sequel sequel_pg postgres:") do
     50000.times do |i|
       Post.where(id: i + 1).first.title
     end

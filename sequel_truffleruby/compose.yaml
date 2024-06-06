@@ -20,11 +20,7 @@ x-backend: &backend
     - history:/usr/local/hist
   environment: &backend_environment
     DATABASE_URL: postgres://postgres:postgres@postgres:5432/TestAR
-    TRUFFLERUBYOPT: --experimental-options --cexts-lock=false
-    HISTFILE: /usr/local/hist/.bash_history
-    PSQL_HISTFILE: /usr/local/hist/.psql_history
-    IRB_HISTFILE: /usr/local/hist/.irb_history
-    EDITOR: vi
+    TRUFFLERUBYOPT: --jvm
   depends_on: &backend_depends_on
     postgres:
       condition: service_healthy

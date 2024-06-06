@@ -5,7 +5,7 @@ require "securerandom"
 require "active_record"
 require "benchmark"
 
-ActiveRecord::Base.establish_connection(ENV["DATABASE_URL"])
+ActiveRecord::Base.establish_connection adapter: "sqlite3", database: ":memory:"
 
 ActiveRecord::Schema.define do
   create_table :posts, force: true do |t|
@@ -33,7 +33,7 @@ ActiveRecord::Base.uncached do
 end
 
 Benchmark.bm(10) do |x|
-  x.report("ActiveRecord postgres:") do
+  x.report("ActiveRecord sqlite:") do
     ActiveRecord::Base.uncached do
       50000.times do |i|
         Post.where(id: i + 1).first.title

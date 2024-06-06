@@ -15,7 +15,7 @@ DEPENDENCIES
   sequel (~> 5.81)
 
 RUBY VERSION
-   ruby 3.3.1p55
+   ruby 3.2.2p0 (truffleruby 24.0.1)
 
 BUNDLED WITH
    2.5.11

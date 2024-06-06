@@ -33,28 +33,14 @@ ActiveRecord::Base.uncached do
 end
 
 Benchmark.bm(10) do |x|
-  30.times do |n|
-    x.report("ActiveRecord-tf run #{n}:") do
+  10.times do |n|
+    x.report("ActiveRecord truffleruby postgres #{n}:") do
       ActiveRecord::Base.uncached do
-        Post.where(id: n + 1).first.title
+        50000.times do |i|
+          Post.where(id: i + 1).first.title
+        end
       end
     end
   end
 end
 
-# warmup
-ActiveRecord::Base.uncached do
-  50000.times do |i|
-    Post.where(id: i + 1).first.title
-  end
-end
-
-Benchmark.bm(10) do |x|
-  x.report("ActiveRecord:") do
-    ActiveRecord::Base.uncached do
-      50000.times do |i|
-        Post.where(id: i + 1).first.title
-      end
-    end
-  end
-end

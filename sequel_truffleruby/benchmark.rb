@@ -49,9 +49,11 @@ end
 end
 
 Benchmark.bm(10) do |x|
-  x.report("Sequel-tr:") do
-    50000.times do |i|
-      Post.where(id: i + 1).first.title
+  30.times do |n|
+    x.report("Sequel truffleruby postgres #{n}:") do
+      50000.times do |i|
+        Post.where(id: i + 1).first.title
+      end
     end
   end
 end

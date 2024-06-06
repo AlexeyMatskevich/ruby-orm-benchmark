@@ -36,26 +36,11 @@ end
 
 Benchmark.bm(10) do |x|
   30.times do |n|
-    x.report("ActiveRecord-YJIT run #{n}:") do
+    x.report("ActiveRecord YJIT postgres #{n}:") do
       ActiveRecord::Base.uncached do
-        Post.where(id: n + 1).first.title
-      end
-    end
-  end
-end
-
-# warmup
-ActiveRecord::Base.uncached do
-  50000.times do |i|
-    Post.where(id: i + 1).first.title
-  end
-end
-
-Benchmark.bm(10) do |x|
-  x.report("ActiveRecord-YJIT:") do
-    ActiveRecord::Base.uncached do
-      50000.times do |i|
-        Post.where(id: i + 1).first.title
+        50000.times do |i|
+          Post.where(id: i + 1).first.title
+        end
       end
     end
   end

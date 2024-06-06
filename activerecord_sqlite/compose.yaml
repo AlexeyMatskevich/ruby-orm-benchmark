@@ -1,0 +1,29 @@
+x-app: &app
+  build:
+    context: .
+    args:
+      RUBY_VERSION: '3.3.1'
+  image: ruby-sqlite-test:1.0.0
+  tmpfs:
+    - /tmp
+    - /app/tmp
+    - /app/tmp/pids
+
+x-backend: &backend
+  <<: *app
+  stdin_open: true
+  tty: true
+  volumes:
+    - .:/app:cached
+    - bundle:/usr/local/bundle
+    - history:/usr/local/hist
+
+services:
+  ruby:
+    <<: *backend
+    command: ruby ./benchmark.rb
+
+volumes:
+  bundle:
+  history:
+  postgres:
