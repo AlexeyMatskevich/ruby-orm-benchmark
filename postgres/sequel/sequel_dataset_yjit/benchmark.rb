@@ -1,3 +1,5 @@
+RubyVM::YJIT.enable
+
 require 'bundler/setup'
 Bundler.require(:default)
 
@@ -5,6 +7,7 @@ require 'securerandom'
 require 'sequel'
 require 'benchmark'
 
+Sequel.extension :fiber_concurrency
 DB = Sequel.connect(ENV["DATABASE_URL"])
 
 DB.create_table(:posts) do
@@ -37,22 +40,9 @@ end
 
 Benchmark.bm(10) do |x|
   30.times do |n|
-    x.report("Sequel-tr run #{n}:") do
-      Post.where(id: n + 1).first.title
-    end
-  end
-end
-
-# warmup
-50000.times do |i|
-  Post.where(id: i + 1).first.title
-end
-
-Benchmark.bm(10) do |x|
-  30.times do |n|
-    x.report("Sequel truffleruby postgres #{n}:") do
+    x.report("Sequel YJIT dataset postgres #{n}:") do
       50000.times do |i|
-        Post.where(id: i + 1).first.title
+        DB[:posts].where(id: i + 1).first[:title]
       end
     end
   end

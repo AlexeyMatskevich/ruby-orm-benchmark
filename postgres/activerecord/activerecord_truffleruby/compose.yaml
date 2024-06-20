@@ -1,0 +1,51 @@
+x-app: &app
+  build:
+    context: .
+    args:
+      TRUFFLERUBY_VERSION: '24.0.1'
+      PG_MAJOR: '16'
+  image: truffleruby-test:1.0.0
+  tmpfs:
+    - /tmp
+    - /app/tmp
+    - /app/tmp/pids
+
+x-backend: &backend
+  <<: *app
+  stdin_open: true
+  tty: true
+  volumes:
+    - .:/app:cached
+    - bundle:/usr/local/bundle
+    - history:/usr/local/hist
+  environment: &backend_environment
+    DATABASE_URL: postgres://postgres:postgres@postgres:5432/TestAR
+    TRUFFLERUBYOPT: --experimental-options --cexts-lock=false
+  depends_on: &backend_depends_on
+    postgres:
+      condition: service_healthy
+
+services:
+  ruby:
+    <<: *backend
+    command: ruby ./benchmark.rb
+
+  postgres:
+    image: postgres:16
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - history:/user/local/hist
+    environment:
+      PSQL_HISTFILE: /user/local/hist/.psql_history
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: TestAR
+    ports:
+      - 5432
+    healthcheck:
+      test: pg_isready -U postgres -h 127.0.0.1
+      interval: 5s
+
+volumes:
+  bundle:
+  history:
+  postgres:

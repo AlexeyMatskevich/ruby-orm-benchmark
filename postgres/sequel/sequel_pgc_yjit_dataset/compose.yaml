@@ -2,9 +2,9 @@ x-app: &app
   build:
     context: .
     args:
-      TRUFFLERUBY_VERSION: '24.0.1'
+      RUBY_VERSION: '3.3.1'
       PG_MAJOR: '16'
-  image: truffleruby-test:1.0.0
+  image: ruby-test:1.0.0
   tmpfs:
     - /tmp
     - /app/tmp
@@ -19,8 +19,7 @@ x-backend: &backend
     - bundle:/usr/local/bundle
     - history:/usr/local/hist
   environment: &backend_environment
-    DATABASE_URL: postgres://postgres:postgres@postgres:5432/TestAR
-    TRUFFLERUBYOPT: --jvm
+    DATABASE_URL: postgres://postgres:postgres@postgres:5432/TestSequelCY
   depends_on: &backend_depends_on
     postgres:
       condition: service_healthy
@@ -38,7 +37,7 @@ services:
     environment:
       PSQL_HISTFILE: /user/local/hist/.psql_history
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: TestAR
+      POSTGRES_DB: TestSequelCY
     ports:
       - 5432
     healthcheck:

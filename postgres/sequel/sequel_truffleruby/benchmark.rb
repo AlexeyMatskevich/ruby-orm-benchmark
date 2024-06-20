@@ -35,18 +35,17 @@ end
   )
 end
 
-Benchmark.bm(10) do |x|
-  30.times do |n|
-    x.report("Sequel run #{n}:") do
-      Post.where(id: n + 1).first.title
-    end
-  end
+# warmup
+50000.times do |i|
+  Post.where(id: i + 1).first.title
 end
 
 Benchmark.bm(10) do |x|
-  x.report("Sequel postgres:") do
-    50000.times do |i|
-      Post.where(id: i + 1).first.title
+  30.times do |n|
+    x.report("Sequel truffleruby postgres #{n}:") do
+      50000.times do |i|
+        Post.where(id: i + 1).first.title
+      end
     end
   end
 end

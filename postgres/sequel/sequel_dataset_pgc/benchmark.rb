@@ -1,7 +1,5 @@
-RubyVM::YJIT.enable
-
 require 'bundler/setup'
-Bundler.require(:default)
+# Bundler.require(:default)
 
 require 'securerandom'
 require 'sequel'
@@ -38,19 +36,9 @@ end
 end
 
 Benchmark.bm(10) do |x|
-  30.times do |n|
-    x.report("Sequel-YJIT run #{n}:") do
-      Post.where(id: n + 1).first.title
-    end
-  end
-end
-
-Benchmark.bm(10) do |x|
-  30.times do |n|
-    x.report("Sequel YJIT postgres #{n}:") do
-      50000.times do |i|
-        Post.where(id: i + 1).first.title
-      end
+  x.report("Sequel sequel_pg dataset postgres:") do
+    50000.times do |i|
+      DB[:posts].where(id: i + 1).first[:title]
     end
   end
 end
