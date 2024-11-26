@@ -18,8 +18,6 @@ x-backend: &backend
     - .:/app:cached
     - bundle:/usr/local/bundle
   environment: &backend_environment
-    DATABASE_URL: postgres://postgres:postgres@postgres:5432/TestAR
-    TRUFFLERUBYOPT: --experimental-options --cexts-lock=false
 
 services:
   ruby:
