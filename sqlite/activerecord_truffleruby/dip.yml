@@ -13,27 +13,24 @@ interaction:
     description: Run an arbitrary script within a ruby container (or open a shell without deps)
     service: ruby
     command: /bin/bash
-    compose_run_options: [no-deps]
+    compose:
+      run_options: [ no-deps ]
 
   # A shortcut to run Bundler commands
   bundle:
     description: Run Bundler commands
     service: ruby
     command: bundle
-    compose_run_options: [no-deps]
+    compose:
+      run_options: [ no-deps ]
   # A shortcut to run Bundler commands
 
   ruby:
     description: Run Bundler commands
     service: ruby
     command: ruby
-    compose_run_options: [no-deps]
-
-  psql:
-    description: Run Postgres psql console
-    service: postgres
-    default_args: api_development
-    command: psql -h postgres -U postgres
+    compose:
+      run_options: [ no-deps ]
 
 provision:
   # We need the `|| true` part because some docker-compose versions

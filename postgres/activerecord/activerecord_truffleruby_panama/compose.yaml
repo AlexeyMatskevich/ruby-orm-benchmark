@@ -1,11 +1,11 @@
 x-app: &app
   build:
     context: .
-    dockerfile: ../../../dockerfiles/postgres/ruby/Dockerfile
+    dockerfile: ../../../dockerfiles/postgres/truffleruby/Dockerfile
     args:
-      RUBY_VERSION: '3.3.6'
+      TRUFFLERUBY_VERSION: '24.1.1'
       PG_MAJOR: '17'
-  image: ruby-test:1.0.0
+  image: truffleruby-test:1.0.0
   tmpfs:
     - /tmp
     - /app/tmp
@@ -19,7 +19,8 @@ x-backend: &backend
     - .:/app:cached
     - bundle:/usr/local/bundle
   environment: &backend_environment
-    DATABASE_URL: postgres://postgres:postgres@postgres:5432/TestSequelCY
+    DATABASE_URL: postgres://postgres:postgres@postgres:5432/TestAR
+    TRUFFLERUBYOPT: --jvm --experimental-options --cexts-lock=false --cexts-panama
   depends_on: &backend_depends_on
     postgres:
       condition: service_healthy
@@ -34,7 +35,7 @@ services:
     environment:
       PSQL_HISTFILE: /user/local/hist/.psql_history
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: TestSequelCY
+      POSTGRES_DB: TestAR
     ports:
       - 5432
     healthcheck:

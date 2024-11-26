@@ -1,8 +1,9 @@
 x-app: &app
   build:
     context: .
+    dockerfile: ../../dockerfiles/ruby/Dockerfile
     args:
-      RUBY_VERSION: '3.3.1'
+      RUBY_VERSION: '3.3.6'
   image: ruby-sqlite-test:1.0.0
   tmpfs:
     - /tmp
@@ -16,7 +17,6 @@ x-backend: &backend
   volumes:
     - .:/app:cached
     - bundle:/usr/local/bundle
-    - history:/usr/local/hist
 
 services:
   ruby:
@@ -25,5 +25,3 @@ services:
 
 volumes:
   bundle:
-  history:
-  postgres:

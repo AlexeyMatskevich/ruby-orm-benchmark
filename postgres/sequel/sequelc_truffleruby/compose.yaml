@@ -1,9 +1,10 @@
 x-app: &app
   build:
     context: .
+    dockerfile: ../../../dockerfiles/postgres/truffleruby/Dockerfile
     args:
-      TRUFFLERUBY_VERSION: '24.0.1'
-      PG_MAJOR: '16'
+      TRUFFLERUBY_VERSION: '24.1.1'
+      PG_MAJOR: '17'
   image: truffleruby-test:1.0.0
   tmpfs:
     - /tmp
@@ -17,10 +18,9 @@ x-backend: &backend
   volumes:
     - .:/app:cached
     - bundle:/usr/local/bundle
-    - history:/usr/local/hist
   environment: &backend_environment
     DATABASE_URL: postgres://postgres:postgres@postgres:5432/TestAR
-    TRUFFLERUBYOPT: --jvm
+    TRUFFLERUBYOPT: --experimental-options --cexts-lock=false --cexts-panama
   depends_on: &backend_depends_on
     postgres:
       condition: service_healthy
@@ -31,10 +31,7 @@ services:
     command: ruby ./benchmark.rb
 
   postgres:
-    image: postgres:16
-    volumes:
-      - postgres:/var/lib/postgresql/data
-      - history:/user/local/hist
+    image: postgres:17
     environment:
       PSQL_HISTFILE: /user/local/hist/.psql_history
       POSTGRES_PASSWORD: postgres
@@ -47,5 +44,3 @@ services:
 
 volumes:
   bundle:
-  history:
-  postgres:
