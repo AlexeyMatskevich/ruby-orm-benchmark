@@ -1,0 +1,46 @@
+x-app: &app
+  build:
+    context: .
+    dockerfile: ../../../dockerfiles/postgres/jruby/Dockerfile
+    args:
+      JRUBY_VERSION: '9.4.9.0'
+      PG_MAJOR: '17'
+  image: jruby-test:1.0.0
+  tmpfs:
+    - /tmp
+    - /app/tmp
+    - /app/tmp/pids
+
+x-backend: &backend
+  <<: *app
+  stdin_open: true
+  tty: true
+  volumes:
+    - .:/app:cached
+    - bundle:/usr/local/bundle
+  environment: &backend_environment
+    DATABASE_URL: postgres://postgres:postgres@postgres:5432/TestAR
+    TRUFFLERUBYOPT: --experimental-options --cexts-lock=false
+  depends_on: &backend_depends_on
+    postgres:
+      condition: service_healthy
+
+services:
+  ruby:
+    <<: *backend
+    command: ruby ./benchmark.rb
+
+  postgres:
+    image: postgres:17
+    environment:
+      PSQL_HISTFILE: /user/local/hist/.psql_history
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: TestAR
+    ports:
+      - 5432
+    healthcheck:
+      test: pg_isready -U postgres -h 127.0.0.1
+      interval: 5s
+
+volumes:
+  bundle:
