@@ -1,0 +1,42 @@
+version: '7.1'
+
+compose:
+  files:
+    - ./compose.yaml
+
+interaction:
+  # This command spins up a Rails container with the required dependencies (such as databases),
+  # and opens a terminal within it.
+
+  # Run a Rails container without any dependent services (useful for non-Rails scripts)
+  bash:
+    description: Run an arbitrary script within a ruby container (or open a shell without deps)
+    service: ruby
+    command: /bin/bash
+    compose:
+      run_options: [ no-deps ]
+
+  # A shortcut to run Bundler commands
+  bundle:
+    description: Run Bundler commands
+    service: ruby
+    command: bundle
+    compose:
+      run_options: [ no-deps ]
+  # A shortcut to run Bundler commands
+
+  ruby:
+    description: Run Bundler commands
+    service: ruby
+    command: ruby
+    compose:
+      run_options: [ no-deps ]
+
+provision:
+  # We need the `|| true` part because some docker-compose versions
+  # cannot down a non-existent container without an error,
+  # see https://github.com/docker/compose/issues/9426
+  - dip compose down --volumes || true
+  - dip bundle install
+  - dip ruby ./benchmark.rb
+  - dip down
